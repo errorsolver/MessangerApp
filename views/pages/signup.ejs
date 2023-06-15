@@ -1,0 +1,59 @@
+<%- include('../partials/head.ejs') %>
+
+<body>
+  <div class="
+    custom
+    p-5 border rounded-4 col-auto
+    centering container 
+    position-absolute top-50 start-50 translate-middle
+    centering content
+    d-flex justify-content-center">
+    <form class="">
+      <h1 class="text-center">Signup</h1>
+      <div class="row">
+        <label for="username">Username</label>
+        <input class="form-control" type="text" id="username" required>
+      </div>
+      <div class="row">
+        <label for="password">Password</label>
+        <input class="form-control" type="password" id="password" required>
+      </div>
+      <div class="row mt-2 padding_0">
+        <button class="btn" type="submit">Signup</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.querySelector('form')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const username = form.username.value
+      const password = form.password.value
+
+      console.log(username, password)
+      try {
+        const res = await fetch("/user/signup", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username, password
+          })
+        })
+
+        const data = await res.json()
+        console.log(data)
+
+        if (data.user) {
+          location.assign('/user/login')
+        }
+      } catch (err) {
+        console.log('error: ',err)
+      }
+    })
+  </script>
+</body>
