@@ -1,15 +1,19 @@
 <%- include('../partials/head.ejs') %>
 
+<!-- TODO: add alert when user already exist -->
+
 <body>
+  <div class="error"></div>
   <div class="
     custom
-    p-5 border rounded-4 col-auto
+    px-5 py-4 border rounded-4 col-auto
     centering container 
     position-absolute top-50 start-50 translate-middle
     centering content
     d-flex justify-content-center">
     <form class="">
       <h1 class="text-center">Signup</h1>
+
       <div class="row">
         <label for="username">Username</label>
         <input class="form-control" type="text" id="username" required>
@@ -18,17 +22,23 @@
         <label for="password">Password</label>
         <input class="form-control" type="password" id="password" required>
       </div>
+
       <div class="row mt-2 padding_0">
-        <button class="btn" type="submit">Signup</button>
+        <button class="btn bg-light" type="submit">Signup</button>
       </div>
+      <p class="text-center">
+        Have an account? <a href="/user/login">Login</a>
+      </p>
     </form>
   </div>
 
   <script>
     const form = document.querySelector('form')
+    const getErrorDiv = document.querySelector('.error')
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault()
+      getErrorDiv.innerHTML = ''
 
       const username = form.username.value
       const password = form.password.value
@@ -41,7 +51,8 @@
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            username, password
+            username,
+            password
           })
         })
 
@@ -51,8 +62,27 @@
         if (data.user) {
           location.assign('/user/login')
         }
+
+        if (data.errors) {
+          for (let res in data.errors) {
+            console.log(data.errors[res])
+            if (data.errors[res] == '') {
+              delete data.errors[res]
+            }
+          }
+
+          console.log(data.errors);
+
+          getErrorDiv.innerHTML = `
+          <div class="bg-danger text-white sticky-top" style="height: 2em;">
+            <p class="error d-block text-center p-1">
+              ${Object.values(data.errors)}
+            </p>
+          </div>
+          `
+        }
       } catch (err) {
-        console.log('error: ',err)
+        console.log('error: ', err)
       }
     })
   </script>

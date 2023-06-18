@@ -6,14 +6,24 @@ const usersController = {}
 
 // TODO: use handlerErrors after all done
 const handlerErrors = (err) => {
-    let errors = { email: '', password: '' }
+    console.log('err: ', err);
 
-    // if(err.message.includes('user validation failed')) {
-    //     Object.values(err.errors).forEach( ({properties}) => {
-    //         errors[properties.path] = properties.message
-    //     })
-    // }
-    return err
+    let errors = { username: '', password: '' }
+
+    if (err == 'User not found') {
+        errors.username = err
+    }
+
+    try {
+        if (err.name.includes('SequelizeUniqueConstraintError')) {
+            Object.values(err.errors).forEach((properties) => {
+                errors[properties.path] = properties.message
+            })
+        }
+    } catch (e) {
+        console.log('not really error, just fine... ;)')
+    }
+    return errors
 }
 
 usersController.getUsersExcept_get = async (req, res) => {
@@ -56,9 +66,9 @@ usersController.signup_post = async (req, res) => {
             // token: req.cookies._jwt
         })
     } catch (error) {
-        // handlerErrors(err)
+        const errors = handlerErrors(error)
         res.status(404).json({
-            error
+            errors
         })
     }
 }
@@ -75,6 +85,11 @@ usersController.login_post = async (req, res) => {
                 username, password
             }
         })
+
+        // TODO: slice user and pass function
+        // password that get from client compared with user data that collected from db
+        // inner every if, throw error when 1 of them is not match
+
         if (user == null) throw 'User not found'
 
         const token = jwt.sign(user.id, process.env.PASSCODE)
@@ -92,10 +107,13 @@ usersController.login_post = async (req, res) => {
 
         // if(process.env.NODE_ENV == 'production') cookieOptions.secure = true
 
+        const envType = process.env.NODE_ENV
+        const secure = envType == 'production' ? true : false
+
         res.status(200)
             .cookie('_jwt', token, {
                 maxAge: new Date(Date.now() + Number(process.env.TOKENEXPMS)),
-                secure: false,
+                secure,
                 httpOnly: true
             })
             .json({
@@ -103,10 +121,11 @@ usersController.login_post = async (req, res) => {
                 token,
                 user,
             })
-    } catch (error) {
+    } catch (err) {
+        errors = handlerErrors(err)
         res.status(400).json({
             message: 'Login Fail',
-            error
+            errors
         })
     }
 }
@@ -114,7 +133,7 @@ usersController.login_post = async (req, res) => {
 usersController.logout_get = async (req, res) => {
     try {
         res.status(200)
-            .cookie('_jwt', '',{
+            .cookie('_jwt', '', {
                 maxAge: 0
             })
             .json({

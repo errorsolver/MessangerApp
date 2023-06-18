@@ -37,6 +37,7 @@ messageController.getMessage_post = async (req, res) => {
 messageController.sendMessage_post = async (req, res) => {
     try {
         const { receiverId, message } = req.body
+        if(message == '') throw "Message input cant be null"
         const token = await req.cookies._jwt
         const senderId = jwt.verify(token, process.env.PASSCODE)
 

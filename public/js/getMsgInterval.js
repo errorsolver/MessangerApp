@@ -30,8 +30,8 @@ const getMessage = async (detail) => {
         getMessagesUL.innerHTML = ''
         if (!detail.target.id) throw 'need target id'
         const targetId = detail.target.id
-        localStorage.selectedUser = targetId
-        receiverId = localStorage.selectedUser
+        sessionStorage.selectedUser = targetId
+        receiverId = sessionStorage.selectedUser
 
         const res = await fetch('/message/get', {
             method: 'POST',
@@ -65,7 +65,7 @@ const getMessage = async (detail) => {
             createLI.id = e.senderId
             createLI.textContent = e.message
             // createLI.classList.add('inline', 'list-group-item')
-            if (createLI.id != localStorage.selectedUser) {
+            if (createLI.id != sessionStorage.selectedUser) {
                 createLI.classList.add('text-end')
             }
             getMessagesUL.appendChild(createLI)
@@ -98,7 +98,7 @@ sendMessageForm.addEventListener('submit', async (e) => {
 async function getMessages() {
     const getInputMessage = document.getElementById('inputMessage')
     const message = getInputMessage.value
-    const receiverId = localStorage.selectedUser
+    const receiverId = sessionStorage.selectedUser
     try {
         const result = await fetch('/message/send', {
             method: 'POST',

@@ -1,24 +1,34 @@
 <%- include('../partials/head.ejs') %>
 
-<body>
-  <div class="container">
-    <div>
-      <h1>Contact</h1>
-      <ul id="ulContact">
-      </ul>
-    </div>
-    <div>
-      <h1>Message</h1>
-      <ul class="" id="ulMessages"></ul>
+<body class="">
+  <%- include('../partials/header-message') %>
+  <div class="container" style="height: 80vh">
+    <div class="row h-100">
+      <div class="col-md-4 h-100">
+        <div class="container h-100">
+          <h1>Contact</h1>
+          <ul class="h-100 overflow-y-auto list-group border" id="ulContact">
+          </ul>
+        </div>
+      </div>
 
-      <form>
-        <input type="text" id="inputMessage">
-        <button type="submit">Send</button>
-      </form>
+      <div class="col-md-8 h-100">
+        <div class="container h-100">
+          <h1 class="">Message</h1>
+          <form class="input-group">
+            <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
+            <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
+          </form>
+          <div class="border h-100 rounded">
+            <ul class="p-0 h-100 overflow-y-auto" id="ulMessages"></ul>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
 
+  <!-- TODO: Make refresh button for get message -->
   <script>
     const getContactUL = document.getElementById("ulContact")
     const getUsers = async () => {
@@ -37,6 +47,7 @@
           const createLI = document.createElement('li')
 
           createLI.id = e.id
+          createLI.classList.add('list-group-item')
           createLI.textContent = e.username
           createLI.addEventListener('click', (e) => {
             saveReceiverId(e)
@@ -51,14 +62,14 @@
 
     const saveReceiverId = (detail) => {
       if (!detail.target.id) throw 'need target id'
-        const targetId = detail.target.id
-        localStorage.selectedUser = targetId
+      const targetId = detail.target.id
+      sessionStorage.selectedUser = targetId
     }
     const getMessagesUL = document.getElementById('ulMessages')
     const getMessage = async () => {
       try {
         getMessagesUL.innerHTML = ''
-        receiverId = localStorage.selectedUser
+        receiverId = sessionStorage.selectedUser
 
         const res = await fetch('/message/get', {
           method: 'POST',
@@ -85,15 +96,27 @@
             messages.push(e)
           }
         })
-        messages.sort((a, b) => a.id - b.id)
+        messages.sort((a, b) => b.id - a.id)
 
         messages.forEach(e => {
           const createLI = document.createElement('li')
           createLI.id = e.senderId
           createLI.textContent = e.message
           // createLI.classList.add('inline', 'list-group-item')
-          if (createLI.id != localStorage.selectedUser) {
+          if (createLI.id != sessionStorage.selectedUser) {
             createLI.classList.add('text-end')
+            createLI.innerHTML = `
+            <div class="d-inline-block m-1 py-1 px-3 rounded-start border text-bg-primary">
+              ${e.message}
+              </div>
+            `
+          } else {
+            createLI.classList.add('text-start')
+            createLI.innerHTML = `
+            <div class="d-inline-block m-1 py-1 px-2 rounded-end border text-bg-info">
+              ${e.message}
+              </div>
+            `
           }
           getMessagesUL.appendChild(createLI)
         })
@@ -126,7 +149,8 @@
     async function sendMessages() {
       const getInputMessage = document.getElementById('inputMessage')
       const message = getInputMessage.value
-      const receiverId = localStorage.selectedUser
+      getInputMessage.value = ''
+      const receiverId = sessionStorage.selectedUser
       try {
         const result = await fetch('/message/send', {
           method: 'POST',

@@ -10,7 +10,7 @@ server.post('/signup', controller.usersController.signup_post)
 server.get('/login', controller.usersController.login_get)
 server.post('/login', controller.usersController.login_post)
 
-server.get('/logout', controller.usersController.logout_get)
+server.post('/logout', userAuth, controller.usersController.logout_get)
 
 server.get('/getusers', userAuth, controller.usersController.getUsersExcept_get)
 

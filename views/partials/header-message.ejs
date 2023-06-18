@@ -1,0 +1,43 @@
+<nav class="navbar bg-body-tertiary align-items-center " style="height: 2.5em;">
+  <ul class="container justify-content-center">
+    <li id="signup">
+        <a class='link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-3' href="/user/signup">
+        Create New Account
+      </a>
+    </li>
+    <li id="login">
+      <a class='link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-3'
+      href="/user/login">
+        Change Account
+      </a>
+    </li>
+    <li id="logout">
+        <a class='link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-3'>
+        Logout
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  const logoutBtn = document.getElementById('logout')
+  logoutBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch('/user/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const result = await res.json()
+      console.log(result)
+      if(result.message){
+        location.assign('/user/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  })
+
+
+</script>
