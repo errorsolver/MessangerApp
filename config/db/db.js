@@ -3,8 +3,12 @@ const {Sequelize} = require('sequelize')
 const db = new Sequelize(
     process.env.URI,
     {
-        host: process.env.HOST,
-        dialect: 'postgres'
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true
+            }
+        }
     }
 )
 

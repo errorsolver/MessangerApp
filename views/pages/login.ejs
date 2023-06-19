@@ -1,8 +1,13 @@
 <%- include('../partials/head.ejs') %>
-
-<body>
+<style>
+  .bg-pr{
+        background-color: aliceblue;
+    }
+</style>
+<body class="bg-pr">
   <div class="error"></div>
   <div class="
+    bg-light
     custom
     px-5 py-4 border rounded-4 col-auto
     centering container 
@@ -20,7 +25,7 @@
         <input class="form-control" type="password" id="password" required>
       </div>
       <div class="row mt-2 padding_0">
-        <button class="btn bg-light" type="submit">Login</button>
+        <button class="btn btn-secondary" type="submit">Login</button>
       </div>
       <p class="text-center">
         Create an account? <a href="/user/signup">Signup</a>

@@ -20,6 +20,10 @@ const handlerErrors = (err) => {
                 errors[properties.path] = properties.message
             })
         }
+        
+        if (errors.username == 'username must be unique') {
+            errors.username = 'Username already taken'
+        }
     } catch (e) {
         console.log('not really error, just fine... ;)')
     }

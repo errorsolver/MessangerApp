@@ -38,6 +38,6 @@ app.use((req, res, next) => {
 app.use('/user', usersRoutes)
 app.use('/message', messageRoutes)
 
-app.get('/', (req, res) => { res.status(200).send('Welcome To MessagerApp API') })
+app.get('/', (req, res) => { res.render('pages/homepage') })
 
 module.exports = app
