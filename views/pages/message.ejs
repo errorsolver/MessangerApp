@@ -1,34 +1,51 @@
 <%- include('../partials/head.ejs') %>
 <style>
-  .bg-pr{
-        background-color: aliceblue;
+  .bg-pr {
+    background-color: aliceblue;
+  }
+
+  nav ul {
+    height: 100%
+  }
+
+  .scroll ul{
+    height: 75vh
+  }
+  @media only screen and (max-width: 767px) {
+    .contact ul {
+      height: 30vh;
     }
+  }
 </style>
+
 <body class="bg-pr">
   <%- include('../partials/header-message') %>
   <div class="container" style="height: 80vh">
-    <div class="row h-100">
-      <div class="col-md-4 h-100">
-        <div class="container h-100">
-          <h1>Strangers</h1>
-          <ul class="mh-100 overflow-y-auto list-group border bg-light" id="ulContact">
-          </ul>
-        </div>
-      </div>
+    <div class="contact container">
+      <div class="row">
 
-      <div class="col-md-8 h-100">
-        <div class="container h-100">
-          <h1 class="">Message</h1>
-          <form class="input-group">
-            <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
-            <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
-          </form>
-          <div class="border h-100 rounded bg-light">
-            <ul class="p-0 h-100 overflow-y-auto" id="ulMessages"></ul>
+        <div class="row col-md-3">
+          <div class="scroll">
+            <h1>Strangers</h1>
+            <ul class="overflow-y-auto list-group border bg-light h-md-25" id="ulContact">
+            </ul>
           </div>
         </div>
-      </div>
 
+        <div class="row col-md-9">
+          <div class="scroll">
+            <h1 class="">Message</h1>
+            <form class="input-group">
+              <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
+              <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
+            </form>
+            <div class="border  rounded bg-light">
+              <ul class="p-0  overflow-y-auto" id="ulMessages"></ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -119,7 +136,7 @@
             createLI.innerHTML = `
             <div class="d-inline-block m-1 py-1 px-2 rounded-end border text-bg-info">
               ${e.message}
-              </div>
+            </div>
             `
           }
           getMessagesUL.appendChild(createLI)
@@ -130,7 +147,7 @@
           createLI.setAttribute('style', 'white-space: pre-line')
           createLI.textContent = 'No conversation yet \r\n'
           createLI.textContent += 'Say something :D'
-          createLI.classList.add('text-center')
+          createLI.classList.add('text-center', 'm-5')
           getMessagesUL.appendChild(createLI)
         }
       } catch (error) {
