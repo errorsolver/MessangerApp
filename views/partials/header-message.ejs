@@ -30,12 +30,11 @@
         },
       })
       const result = await res.json()
-       (result)
       if(result.message){
         location.assign('/user/login')
       }
     } catch (error) {
-       (error)
+      console.error(error)
     }
   })
 

@@ -17,5 +17,5 @@ server.on('error', (e) => {
 })
 
 function isConnect() {
-   ('Connect to port: ', port);
+  console.log('Connect to port: ', port);
 }

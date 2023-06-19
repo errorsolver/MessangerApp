@@ -77,7 +77,7 @@
           getContactUL.appendChild(createLI)
         })
       } catch (error) {
-         ('error: ', error)
+        console.error('error: ', error)
       }
     }
 
@@ -151,7 +151,7 @@
           getMessagesUL.appendChild(createLI)
         }
       } catch (error) {
-         ('error: ', error);
+        console.error('error: ', error);
       }
     }
 
@@ -166,7 +166,7 @@
         await sendMessages()
         await getMessage()
       } catch (error) {
-         (error)
+        console.error(error)
       }
     })
 
@@ -187,7 +187,7 @@
           })
         })
       } catch (error) {
-         ('send message: ', error);
+        console.error('send message: ', error);
       }
     }
   </script>
