@@ -26,6 +26,6 @@ Messages.belongsTo(Users, {
 })
 
 Messages.sync({ alter: true })
-    .then(() => { console.log('Messages table sync') })
+    .then(() => {  ('Messages table sync') })
 
 module.exports = Messages

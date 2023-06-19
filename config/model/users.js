@@ -21,6 +21,6 @@ const Users = db.define('users', {
 })
 
 Users.sync({ alter: true })
-    .then(() => { console.log('Users table sync') })
+    .then(() => {  ('Users table sync') })
 
 module.exports = Users

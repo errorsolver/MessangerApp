@@ -8,7 +8,7 @@ const userAuth = (req, res,  next) => {
     if(token) {
         jwt.verify(token, passcode, (err, decodedToken) => {
             if(err) {
-                console.log(err)
+                 (err)
                 res.redirect('/user/login')
             } else {
                 next()

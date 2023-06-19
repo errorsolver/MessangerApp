@@ -6,7 +6,7 @@ const usersController = {}
 
 // TODO: use handlerErrors after all done
 const handlerErrors = (err) => {
-    console.log('err: ', err);
+     ('err: ', err);
 
     let errors = { username: '', password: '' }
 
@@ -25,7 +25,7 @@ const handlerErrors = (err) => {
             errors.username = 'Username already taken'
         }
     } catch (e) {
-        console.log('not really error, just fine... ;)')
+         ('not really error, just fine... ;)')
     }
     return errors
 }

@@ -46,7 +46,7 @@
       const username = form.username.value
       const password = form.password.value
 
-      console.log(username, password)
+       (username, password)
       try {
         const res = await fetch("/user/signup", {
           method: 'POST',
@@ -60,7 +60,7 @@
         })
 
         const data = await res.json()
-        console.log(data)
+         (data)
 
         if (data.user) {
           location.assign('/user/login')
@@ -68,13 +68,13 @@
 
         if (data.errors) {
           for (let res in data.errors) {
-            console.log(data.errors[res])
+             (data.errors[res])
             if (data.errors[res] == '') {
               delete data.errors[res]
             }
           }
 
-          console.log(data.errors);
+           (data.errors);
 
           getErrorDiv.innerHTML = `
           <div class="bg-danger text-white sticky-top" style="height: 2em;">
@@ -85,7 +85,7 @@
           `
         }
       } catch (err) {
-        console.log('error: ', err)
+         ('error: ', err)
       }
     })
   </script>
