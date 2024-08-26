@@ -2,7 +2,7 @@
 Message to some stranger and be friend with them.
 
 ## Instalation
-1. CLone this git
+1. Clone this git
 2. Install all dependency using `npm i`
 3. Create file named `.env` in the root of the app folder
 4. Insert `TOKENEXPMS = (time in milisecond)` for cookies expire time, `PASSCODE = (your passcode for jwt)`, `URI = (insert uri db)`
@@ -26,3 +26,9 @@ Message to some stranger and be friend with them.
 - langguage: javascript, ejs
 - framework: express
 - runtime environment: nodejs
+
+## ENV
+- URI = [URI string] || neon.tech
+- PORT = [int]
+- PASSCODE = [string]
+- TOKENEXPMS = [int]
