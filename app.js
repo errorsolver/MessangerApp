@@ -13,7 +13,7 @@ const app = express()
 app.use(helmet())
 app.use(cors(
     {
-        origin: 'http://127.0.0.1:5500',
+        origin: 'http://127.0.0.1:3000',
         credentials: true,
     }
 ))
@@ -28,9 +28,9 @@ app.use('/js', express.static(__dirname + '/js'))
 
 app.use((req, res, next) => {
     res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline'");
-//     res.setHeader('Access-Control-Allow-Credentials', 'true');
-//     res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie')
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    //     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    //     res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie')
+    //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     next();
 });
