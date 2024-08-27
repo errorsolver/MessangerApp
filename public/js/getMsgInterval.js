@@ -20,7 +20,7 @@ const getUsers = async () => {
             getContactUL.appendChild(createLI)
         })
     } catch (error) {
-        console.log('error: ', error)
+        console.error('error: ', error)
     }
 }
 
@@ -77,7 +77,7 @@ const getMessage = async (detail) => {
             getMessagesUL.appendChild(createLI)
         }
     } catch (error) {
-        console.log('error: ', error);
+        console.error('error: ', error);
     }
 }
 
@@ -91,7 +91,7 @@ sendMessageForm.addEventListener('submit', async (e) => {
         e.preventDefault()
         getMessage()
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 })
 
@@ -111,6 +111,6 @@ async function getMessages() {
             })
         })
     } catch (error) {
-        console.log('send message: ', error);
+        console.error('send message: ', error);
     }
 }

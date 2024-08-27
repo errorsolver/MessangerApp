@@ -77,7 +77,7 @@
           getContactUL.appendChild(createLI)
         })
       } catch (error) {
-        console.log('error: ', error)
+        console.error('error: ', error)
       }
     }
 
@@ -151,10 +151,13 @@
           getMessagesUL.appendChild(createLI)
         }
       } catch (error) {
-        console.log('error: ', error);
+        console.error('error: ', error);
       }
     }
 
+    if(sessionStorage.selectedUser){
+      setInterval(getMessage, 500)
+    }
     window.onload = () => {
       getUsers()
     }
@@ -166,7 +169,7 @@
         await sendMessages()
         await getMessage()
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     })
 
@@ -187,7 +190,7 @@
           })
         })
       } catch (error) {
-        console.log('send message: ', error);
+        console.error('send message: ', error);
       }
     }
   </script>

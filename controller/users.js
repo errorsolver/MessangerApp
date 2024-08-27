@@ -6,8 +6,6 @@ const usersController = {}
 
 // TODO: use handlerErrors after all done
 const handlerErrors = (err) => {
-    console.log('err: ', err);
-
     let errors = { username: '', password: '' }
 
     if (err == 'User not found') {
