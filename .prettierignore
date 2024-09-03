@@ -1,0 +1,6 @@
+# Ignore artifacts:
+.github
+node_modules
+.dockerignore
+.env
+.gitignore

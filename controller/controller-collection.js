@@ -1,6 +1,6 @@
-const usersController = require('./users')
-const messageController = require('./message')
+const usersController = require("./users");
+const messageController = require("./message");
 
-const controller = { usersController, messageController }
+const controller = { usersController, messageController };
 
-module.exports = controller
+module.exports = controller;

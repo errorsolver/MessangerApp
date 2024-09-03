@@ -1,6 +1,6 @@
-const Users = require('../model/users')
-const Messages = require('../model/messages')
+const Users = require("../model/users");
+const Messages = require("../model/messages");
 
-const models = { Users, Messages}
+const models = { Messages, Users };
 
-module.exports = models
+module.exports = models;

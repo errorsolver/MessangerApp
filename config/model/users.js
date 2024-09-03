@@ -1,26 +1,34 @@
-const { DataTypes } = require('sequelize')
-const db = require('../db/db')
+const { DataTypes } = require("sequelize");
+const db = require("../db/db");
+// const Messages = require("./messages");
 
-const Users = db.define('users', {
+const Users = db.define(
+  "users",
+  {
     id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     username: {
-        type: DataTypes.STRING(10),
-        unique: true,
-        allowNull: false
+      type: DataTypes.STRING(10),
+      unique: true,
+      allowNull: false,
     },
     password: {
-        type: DataTypes.STRING(10),
-        allowNull: false
-    }
-}, {
-    freezeTableName: true
-})
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
+  },
+  {
+    freezeTableName: true,
+  },
+);
 
-Users.sync({ alter: true })
-    .then(() => { console.log('Users table sync') })
+// Users.hasMany(Messages);
 
-module.exports = Users
+Users.sync({ alter: true }).then(() => {
+  console.log("Users table sync");
+});
+
+module.exports = Users;

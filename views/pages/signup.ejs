@@ -1,12 +1,14 @@
 <%- include('../partials/head.ejs') %>
-<style>
-  .bg-pr{
-        background-color: aliceblue;
+  <style>
+    .bg-pr {
+      background-color: aliceblue;
     }
-</style>
-<body class="bg-pr">
-  <div class="error"></div>
-  <div class="
+  </style>
+
+  <body class="bg-pr">
+    <%- include('../partials/header-login-signup.ejs') %>
+      <div class="error"></div>
+      <div class="
     bg-light
     custom
     px-5 py-4 border rounded-4 col-auto
@@ -14,74 +16,74 @@
     position-absolute top-50 start-50 translate-middle
     centering content
     d-flex justify-content-center">
-    <form class="">
-      <h1 class="text-center">Signup</h1>
+        <form class="">
+          <h1 class="text-center">Signup</h1>
 
-      <div class="row">
-        <label for="username">Username</label>
-        <input class="form-control" type="text" id="username" required>
+          <div class="row">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" id="username" required>
+          </div>
+          <div class="row">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" id="password" required>
+          </div>
+
+          <div class="row mt-2 padding_0">
+            <button class="btn btn-secondary" type="submit">Signup</button>
+          </div>
+          <p class="text-center">
+            Have an account? <a href="/user/login">Login</a>
+          </p>
+        </form>
       </div>
-      <div class="row">
-        <label for="password">Password</label>
-        <input class="form-control" type="password" id="password" required>
-      </div>
 
-      <div class="row mt-2 padding_0">
-        <button class="btn btn-secondary" type="submit">Signup</button>
-      </div>
-      <p class="text-center">
-        Have an account? <a href="/user/login">Login</a>
-      </p>
-    </form>
-  </div>
+      <script>
+        const form = document.querySelector('form')
+        const getErrorDiv = document.querySelector('.error')
 
-  <script>
-    const form = document.querySelector('form')
-    const getErrorDiv = document.querySelector('.error')
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault()
+          getErrorDiv.innerHTML = ''
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      getErrorDiv.innerHTML = ''
+          const username = form.username.value
+          const password = form.password.value
 
-      const username = form.username.value
-      const password = form.password.value
+          try {
+            const res = await fetch("/user/signup", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                username,
+                password
+              })
+            })
 
-      try {
-        const res = await fetch("/user/signup", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username,
-            password
-          })
-        })
+            const data = await res.json()
 
-        const data = await res.json()
-
-        if (data.user) {
-          location.assign('/user/login')
-        }
-
-        if (data.errors) {
-          for (let res in data.errors) {
-            if (data.errors[res] == '') {
-              delete data.errors[res]
+            if (data.user) {
+              location.assign('/user/login')
             }
-          }
 
-          getErrorDiv.innerHTML = `
+            if (data.errors) {
+              for (let res in data.errors) {
+                if (data.errors[res] == '') {
+                  delete data.errors[res]
+                }
+              }
+
+              getErrorDiv.innerHTML = `
           <div class="bg-danger text-white sticky-top" style="height: 2em;">
             <p class="error d-block text-center p-1">
               ${Object.values(data.errors)}
             </p>
           </div>
           `
-        }
-      } catch (err) {
-        console.error('error: ', err)
-      }
-    })
-  </script>
-</body>
+            }
+          } catch (err) {
+            console.error('error: ', err)
+          }
+        })
+      </script>
+  </body>

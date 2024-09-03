@@ -24,6 +24,7 @@
     "sequelize": "^6.32.0"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.8"
+    "@flydotio/dockerfile": "^0.5.8",
+    "prettier": "3.3.3"
   }
 }
