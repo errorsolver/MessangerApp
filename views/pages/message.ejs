@@ -1,197 +1,125 @@
 <%- include('../partials/head.ejs') %>
-<style>
-  .bg-pr {
-    background-color: aliceblue;
-  }
-
-  nav ul {
-    height: 100%
-  }
-
-  .scroll ul{
-    height: 75vh
-  }
-  @media only screen and (max-width: 767px) {
-    .contact ul {
-      height: 30vh;
+  <style>
+    .bg-pr {
+      background-color: aliceblue;
     }
-  }
-</style>
 
-<body class="bg-pr">
-  <%- include('../partials/header-message') %>
-  <div class="container" style="height: 80vh">
-    <div class="contact container">
-      <div class="row">
+    nav ul {
+      height: 100%
+    }
 
-        <div class="row col-md-3">
-          <div class="scroll">
-            <h1>Strangers</h1>
-            <ul class="overflow-y-auto list-group border bg-light h-md-25" id="ulContact">
-            </ul>
+    .scroll ul {
+      height: 75vh
+    }
+
+    .stangersUL{
+      color: aliceblue;
+    }
+
+    hr {
+      margin: 3px;
+    }
+
+    #scrollBott {
+      visibility: hidden;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .contact ul {
+        height: 30vh;
+      }
+    }
+  </style>
+  <%- include('../partials/header-message.ejs') %>
+
+  <body class="bg-pr">
+    <div class="container-m d-flex justify-content-center" style="height: 90vh; margin: auto; margin-top: 4vh;">
+      <div class="contact container-l">
+        <div class="row" style="width: 200vh;">
+
+          <div class="row col-md-3">
+            <div class="scroll">
+
+              <div class="border bg-light overflow-y-auto" style="height: auto; width: 40;">
+                <!--Username + Profile Setting (Logout, Change account, Profile)-->
+                <h1 style="margin-left: 20px;">Username</h1>
+              </div>
+              <div style="height: 79.5vh;">
+                <ul class="overflow-y-auto list-group border bg-light h-md-25" style="height: 85vh;" id="ulFriends">
+                </ul>
+              </div>
+              <div class="dropup-center dropup" style="width: 40vh;">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false" style="width: 43vh;">
+                  Strangers
+                </button>
+                <ul class="dropdown-menu bg-secondary h-md-25" style="height: 70vh; width: 43vh;" id="ulStrangers"></ul>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="row col-md-9">
-          <div class="scroll">
-            <h1 class="">Message</h1>
-            <form class="input-group">
-              <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
-              <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
-            </form>
-            <div class="border  rounded bg-light">
-              <ul class="p-0  overflow-y-auto" id="ulMessages"></ul>
+          <div class="row col-md-9">
+            <div class="scroll">
+
+              <div class="border bg-light" style="height: 8vh;"><!--Recievername + Profile view onClick-->
+                <h1 style="margin-left: 20px;">Message</h1>
+              </div>
+
+              <div class="position-relative border bg-light" style="height: 80vh;">
+                <div style="height: 80vh;" id="chatBox">
+                  <ul class="z-n1 px-5 pb-2 overflow-y-auto" style="height: 80vh; " id="ulMessages"></ul>
+                </div>
+                <button class="position-absolute btn btn-secondary bottom-0 end-0 badge rounded-pill" id="scrollBott"
+                  style="margin-bottom: 20px; margin-right: 25px; height: 5vh; width: 5vh;" type="button"
+                  onClick="scrollToBottom()">
+                  <i class="bi bi-arrow-down"></i>
+                </button>
+              </div>
+
+              <form class="input-group">
+                <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage"
+                  autocomplete="off">
+                <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
+              </form>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-  </div>
 
-  <!-- TODO: Make refresh button for get message -->
-  <script>
-    const getContactUL = document.getElementById("ulContact")
-    const getUsers = async () => {
-      try {
-        const res = await fetch('/user/getusers', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
 
-        const result = await res.json()
-        let users = result.users
-
-        users.forEach(e => {
-          const createLI = document.createElement('li')
-
-          createLI.id = e.id
-          createLI.classList.add('list-group-item')
-          createLI.textContent = e.username
-          createLI.addEventListener('click', (e) => {
-            saveReceiverId(e)
-            getMessage()
-          })
-          getContactUL.appendChild(createLI)
-        })
-      } catch (error) {
-        console.error('error: ', error)
+    <!-- TODO: Make refresh button for get message -->
+    <script type="module" src="../js/messages/contact.js"></script>
+    <script type="module" src="../js/messages/messages.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/validator@13.7.0/validator.min.js"></script>
+    <!-- <script type="module" src="../js/messages/test.js"></script> -->
+    <script>
+      function scrollToBottom() {
+        const element = document.getElementById('ulMessages');
+        element.scrollTop = element.scrollHeight;
       }
-    }
 
-    const saveReceiverId = (detail) => {
-      if (!detail.target.id) throw 'need target id'
-      const targetId = detail.target.id
-      sessionStorage.selectedUser = targetId
-    }
-    const getMessagesUL = document.getElementById('ulMessages')
-    const getMessage = async () => {
-      try {
-        getMessagesUL.innerHTML = ''
-        receiverId = sessionStorage.selectedUser
+      const scroller = document.querySelector("#ulMessages");
+      const element = document.getElementById("ulMessages");
+      let mybutton = document.getElementById("scrollBott");
 
-        const res = await fetch('/message/get', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            receiverId
-          })
-        })
+      // scroller.addEventListener("scroll", () => {
+      //   console.log(scroller.scrollTop);
+      // });
 
-        const result = await res.json()
-        const senderMessages = await result.senderMessages
-        const receiverMessages = await result.receiverMessages
+      function scrollToBottom() {
+        element.scrollTop = element.scrollHeight;
+      }
 
-        const messages = []
-        senderMessages.forEach(e => {
-          if (e.receiverId != e.senderId) {
-            messages.push(e)
-          }
-        })
-        receiverMessages.forEach(e => {
-          if (e.receiverId != e.senderId) {
-            messages.push(e)
-          }
-        })
-        messages.sort((a, b) => b.id - a.id)
+      element.onscroll= function() {scrollFunction()}
 
-        messages.forEach(e => {
-          const createLI = document.createElement('li')
-          createLI.id = e.senderId
-          createLI.textContent = e.message
-          // createLI.classList.add('inline', 'list-group-item')
-          if (createLI.id != sessionStorage.selectedUser) {
-            createLI.classList.add('text-end')
-            createLI.innerHTML = `
-            <div class="d-inline-block m-1 py-1 px-3 rounded-start border text-bg-primary">
-              ${e.message}
-              </div>
-            `
-          } else {
-            createLI.classList.add('text-start')
-            createLI.innerHTML = `
-            <div class="d-inline-block m-1 py-1 px-2 rounded-end border text-bg-info">
-              ${e.message}
-            </div>
-            `
-          }
-          getMessagesUL.appendChild(createLI)
-        })
-
-        if (!getMessagesUL.hasChildNodes()) {
-          const createLI = document.createElement('li')
-          createLI.setAttribute('style', 'white-space: pre-line')
-          createLI.textContent = 'No conversation yet \r\n'
-          createLI.textContent += 'Say something :D'
-          createLI.classList.add('text-center', 'm-5')
-          getMessagesUL.appendChild(createLI)
+      function scrollFunction() {
+        if (element.scrollHeight - scroller.scrollTop < 800 ) {
+          mybutton.style.visibility = "hidden";
+        } else {
+          mybutton.style.visibility = "visible";
         }
-      } catch (error) {
-        console.error('error: ', error);
       }
-    }
+    </script>
 
-    if(sessionStorage.selectedUser){
-      setInterval(getMessage, 1500)
-    }
-    window.onload = () => {
-      getUsers()
-    }
-
-    const sendMessageForm = document.querySelector('form')
-    sendMessageForm.addEventListener('submit', async (e) => {
-      try {
-        e.preventDefault()
-        await sendMessages()
-        await getMessage()
-      } catch (error) {
-        console.error(error)
-      }
-    })
-
-    async function sendMessages() {
-      const getInputMessage = document.getElementById('inputMessage')
-      const message = getInputMessage.value
-      getInputMessage.value = ''
-      const receiverId = sessionStorage.selectedUser
-      try {
-        const result = await fetch('/message/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message,
-            receiverId
-          })
-        })
-      } catch (error) {
-        console.error('send message: ', error);
-      }
-    }
-  </script>
-</body>
+  </body>

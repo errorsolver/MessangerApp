@@ -24,14 +24,20 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static("public"));
-app.use("/js", express.static(__dirname + "/js"));
+app.use("js", express.static(__dirname + "/js"));
+
+// app.use(express.static("node_modules"));
+// app.use("node", express.static("../node_modules"));
+app.use("/modules", express.static("node_modules"));
 
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline'");
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;",
+  );
   //     res.setHeader('Access-Control-Allow-Credentials', 'true');
   //     res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie')
   //     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
   next();
 });
 
