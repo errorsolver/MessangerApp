@@ -24,7 +24,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(express.static("public"));
-app.use("/js", express.static(__dirname + "/js"));
+app.use("js", express.static(__dirname + "/js"));
+
+// console.log('__dirname', __dirname + "\\public\\js");
 
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "script-src 'self' 'unsafe-inline'");

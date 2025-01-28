@@ -1,116 +1,118 @@
-const getContactUL = document.getElementById("ulContact");
-const getUsers = async () => {
-  try {
-    const res = await fetch("/user/getusers", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+console.log("halo");
 
-    const result = await res.json();
-    let users = result.users;
+// const getContactUL = document.getElementById("ulContact");
+// const getUsers = async () => {
+//   try {
+//     const res = await fetch("/user/getusers", {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
 
-    users.forEach((e) => {
-      const createLI = document.createElement("li");
+//     const result = await res.json();
+//     let users = result.users;
 
-      createLI.id = e.id;
-      createLI.textContent = e.username;
-      createLI.addEventListener("click", getMessage);
-      getContactUL.appendChild(createLI);
-    });
-  } catch (error) {
-    console.error("error: ", error);
-  }
-};
+//     users.forEach((e) => {
+//       const createLI = document.createElement("li");
 
-const getMessagesUL = document.getElementById("ulMessages");
-const getMessage = async (detail) => {
-  try {
-    getMessagesUL.innerHTML = "";
-    if (!detail.target.id) throw "need target id";
-    const targetId = detail.target.id;
-    sessionStorage.selectedUser = targetId;
-    receiverId = sessionStorage.selectedUser;
+//       createLI.id = e.id;
+//       createLI.textContent = e.username;
+//       createLI.addEventListener("click", getMessage);
+//       getContactUL.appendChild(createLI);
+//     });
+//   } catch (error) {
+//     console.error("error: ", error);
+//   }
+// };
 
-    const res = await fetch("/message/get", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        receiverId,
-      }),
-    });
+// const getMessagesUL = document.getElementById("ulMessages");
+// const getMessage = async (detail) => {
+//   try {
+//     getMessagesUL.innerHTML = "";
+//     if (!detail.target.id) throw "need target id";
+//     const targetId = detail.target.id;
+//     sessionStorage.selectedUser = targetId;
+//     receiverId = sessionStorage.selectedUser;
 
-    const result = await res.json();
-    const senderMessages = await result.senderMessages;
-    const receiverMessages = await result.receiverMessages;
+//     const res = await fetch("/message/get", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         receiverId,
+//       }),
+//     });
 
-    const messages = [];
-    senderMessages.forEach((e) => {
-      if (e.receiverId != e.senderId) {
-        messages.push(e);
-      }
-    });
-    receiverMessages.forEach((e) => {
-      if (e.receiverId != e.senderId) {
-        messages.push(e);
-      }
-    });
-    messages.sort((a, b) => a.id - b.id);
+//     const result = await res.json();
+//     const senderMessages = await result.senderMessages;
+//     const receiverMessages = await result.receiverMessages;
 
-    messages.forEach((e) => {
-      const createLI = document.createElement("li");
-      createLI.id = e.senderId;
-      createLI.textContent = e.message;
-      // createLI.classList.add('inline', 'list-group-item')
-      if (createLI.id != sessionStorage.selectedUser) {
-        createLI.classList.add("text-end");
-      }
-      getMessagesUL.appendChild(createLI);
-    });
+//     const messages = [];
+//     senderMessages.forEach((e) => {
+//       if (e.receiverId != e.senderId) {
+//         messages.push(e);
+//       }
+//     });
+//     receiverMessages.forEach((e) => {
+//       if (e.receiverId != e.senderId) {
+//         messages.push(e);
+//       }
+//     });
+//     messages.sort((a, b) => a.id - b.id);
 
-    if (!getMessagesUL.hasChildNodes()) {
-      const createLI = document.createElement("li");
-      createLI.textContent = "There is no message";
-      getMessagesUL.appendChild(createLI);
-    }
-  } catch (error) {
-    console.error("error: ", error);
-  }
-};
+//     messages.forEach((e) => {
+//       const createLI = document.createElement("li");
+//       createLI.id = e.senderId;
+//       createLI.textContent = e.message;
+//       // createLI.classList.add('inline', 'list-group-item')
+//       if (createLI.id != sessionStorage.selectedUser) {
+//         createLI.classList.add("text-end");
+//       }
+//       getMessagesUL.appendChild(createLI);
+//     });
 
-window.onload = () => {
-  getUsers();
-};
+//     if (!getMessagesUL.hasChildNodes()) {
+//       const createLI = document.createElement("li");
+//       createLI.textContent = "There is no message";
+//       getMessagesUL.appendChild(createLI);
+//     }
+//   } catch (error) {
+//     console.error("error: ", error);
+//   }
+// };
 
-const sendMessageForm = document.querySelector("form");
-sendMessageForm.addEventListener("submit", async (e) => {
-  try {
-    e.preventDefault();
-    getMessage();
-  } catch (error) {
-    console.error(error);
-  }
-});
+// window.onload = () => {
+//   getUsers();
+// };
 
-async function getMessages() {
-  const getInputMessage = document.getElementById("inputMessage");
-  const message = getInputMessage.value;
-  const receiverId = sessionStorage.selectedUser;
-  try {
-    const result = await fetch("/message/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message,
-        receiverId,
-      }),
-    });
-  } catch (error) {
-    console.error("send message: ", error);
-  }
-}
+// const sendMessageForm = document.querySelector("form");
+// sendMessageForm.addEventListener("submit", async (e) => {
+//   try {
+//     e.preventDefault();
+//     getMessage();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
+
+// async function getMessages() {
+//   const getInputMessage = document.getElementById("inputMessage");
+//   const message = getInputMessage.value;
+//   const receiverId = sessionStorage.selectedUser;
+//   try {
+//     const result = await fetch("/message/send", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         message,
+//         receiverId,
+//       }),
+//     });
+//   } catch (error) {
+//     console.error("send message: ", error);
+//   }
+// }

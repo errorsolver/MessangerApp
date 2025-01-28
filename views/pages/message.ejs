@@ -1,197 +1,199 @@
 <%- include('../partials/head.ejs') %>
-<style>
-  .bg-pr {
-    background-color: aliceblue;
-  }
-
-  nav ul {
-    height: 100%
-  }
-
-  .scroll ul{
-    height: 75vh
-  }
-  @media only screen and (max-width: 767px) {
-    .contact ul {
-      height: 30vh;
+  <style>
+    .bg-pr {
+      background-color: aliceblue;
     }
-  }
-</style>
 
-<body class="bg-pr">
-  <%- include('../partials/header-message') %>
-  <div class="container" style="height: 80vh">
-    <div class="contact container">
-      <div class="row">
+    nav ul {
+      height: 100%
+    }
 
-        <div class="row col-md-3">
-          <div class="scroll">
-            <h1>Strangers</h1>
-            <ul class="overflow-y-auto list-group border bg-light h-md-25" id="ulContact">
-            </ul>
-          </div>
-        </div>
+    .scroll ul {
+      height: 75vh
+    }
 
-        <div class="row col-md-9">
-          <div class="scroll">
-            <h1 class="">Message</h1>
-            <form class="input-group">
-              <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
-              <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
-            </form>
-            <div class="border  rounded bg-light">
-              <ul class="p-0  overflow-y-auto" id="ulMessages"></ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- TODO: Make refresh button for get message -->
-  <script>
-    const getContactUL = document.getElementById("ulContact")
-    const getUsers = async () => {
-      try {
-        const res = await fetch('/user/getusers', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-
-        const result = await res.json()
-        let users = result.users
-
-        users.forEach(e => {
-          const createLI = document.createElement('li')
-
-          createLI.id = e.id
-          createLI.classList.add('list-group-item')
-          createLI.textContent = e.username
-          createLI.addEventListener('click', (e) => {
-            saveReceiverId(e)
-            getMessage()
-          })
-          getContactUL.appendChild(createLI)
-        })
-      } catch (error) {
-        console.error('error: ', error)
+    @media only screen and (max-width: 767px) {
+      .contact ul {
+        height: 30vh;
       }
     }
+  </style>
 
-    const saveReceiverId = (detail) => {
-      if (!detail.target.id) throw 'need target id'
-      const targetId = detail.target.id
-      sessionStorage.selectedUser = targetId
-    }
-    const getMessagesUL = document.getElementById('ulMessages')
-    const getMessage = async () => {
-      try {
-        getMessagesUL.innerHTML = ''
-        receiverId = sessionStorage.selectedUser
+  <body class="bg-pr">
+    <%- include('../partials/header-message') %>
+      <div class="container" style="height: 80vh">
+        <div class="contact container">
+          <div class="row">
 
-        const res = await fetch('/message/get', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            receiverId
-          })
-        })
+            <div class="row col-md-3">
+              <div class="scroll">
+                <h1>Strangers</h1>
+                <ul class="overflow-y-auto list-group border bg-light h-md-25" id="ulContact">
+                </ul>
+              </div>
+            </div>
 
-        const result = await res.json()
-        const senderMessages = await result.senderMessages
-        const receiverMessages = await result.receiverMessages
+            <div class="row col-md-9">
+              <div class="scroll">
+                <h1 class="">Message</h1>
+                <form class="input-group">
+                  <input type="text" class="w-75 form-control" placeholder="Input Message" id="inputMessage">
+                  <button type="submit" class="btn form-control btn-light border w-auto text-wrap">Send</button>
+                </form>
+                <div class="border  rounded bg-light">
+                  <ul class="p-0  overflow-y-auto" id="ulMessages"></ul>
+                </div>
+              </div>
+            </div>
 
-        const messages = []
-        senderMessages.forEach(e => {
-          if (e.receiverId != e.senderId) {
-            messages.push(e)
+          </div>
+        </div>
+      </div>
+
+      <!-- TODO: Make refresh button for get message -->
+      <script>
+        const getContactUL = document.getElementById("ulContact")
+        const getUsers = async () => {
+          try {
+            const res = await fetch('/user/getusers', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+
+            const result = await res.json()
+            let users = result.users
+
+            users.forEach(e => {
+              const createLI = document.createElement('li')
+
+              createLI.id = e.id
+              createLI.classList.add('list-group-item')
+              createLI.textContent = e.username
+              createLI.addEventListener('click', (e) => {
+                saveReceiverId(e)
+                getMessage()
+              })
+              getContactUL.appendChild(createLI)
+            })
+          } catch (error) {
+            console.error('error: ', error)
           }
-        })
-        receiverMessages.forEach(e => {
-          if (e.receiverId != e.senderId) {
-            messages.push(e)
-          }
-        })
-        messages.sort((a, b) => b.id - a.id)
+        }
 
-        messages.forEach(e => {
-          const createLI = document.createElement('li')
-          createLI.id = e.senderId
-          createLI.textContent = e.message
-          // createLI.classList.add('inline', 'list-group-item')
-          if (createLI.id != sessionStorage.selectedUser) {
-            createLI.classList.add('text-end')
-            createLI.innerHTML = `
+        const saveReceiverId = (detail) => {
+          if (!detail.target.id) throw 'need target id'
+          const targetId = detail.target.id
+          sessionStorage.selectedUser = targetId
+        }
+        const getMessagesUL = document.getElementById('ulMessages')
+        const getMessage = async () => {
+          try {
+            getMessagesUL.innerHTML = ''
+            receiverId = sessionStorage.selectedUser
+
+            const res = await fetch('/message/get', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                receiverId
+              })
+            })
+
+            const result = await res.json()
+            const senderMessages = await result.senderMessages
+            const receiverMessages = await result.receiverMessages
+
+            const messages = []
+            senderMessages.forEach(e => {
+              if (e.receiverId != e.senderId) {
+                messages.push(e)
+              }
+            })
+            receiverMessages.forEach(e => {
+              if (e.receiverId != e.senderId) {
+                messages.push(e)
+              }
+            })
+            messages.sort((a, b) => b.id - a.id)
+
+            messages.forEach(e => {
+              const createLI = document.createElement('li')
+              createLI.id = e.senderId
+              createLI.textContent = e.message
+              // createLI.classList.add('inline', 'list-group-item')
+              if (createLI.id != sessionStorage.selectedUser) {
+                createLI.classList.add('text-end')
+                createLI.innerHTML = `
             <div class="d-inline-block m-1 py-1 px-3 rounded-start border text-bg-primary">
               ${e.message}
               </div>
             `
-          } else {
-            createLI.classList.add('text-start')
-            createLI.innerHTML = `
+              } else {
+                createLI.classList.add('text-start')
+                createLI.innerHTML = `
             <div class="d-inline-block m-1 py-1 px-2 rounded-end border text-bg-info">
               ${e.message}
             </div>
             `
+              }
+              getMessagesUL.appendChild(createLI)
+            })
+
+            if (!getMessagesUL.hasChildNodes()) {
+              const createLI = document.createElement('li')
+              createLI.setAttribute('style', 'white-space: pre-line')
+              createLI.textContent = 'No conversation yet \r\n'
+              createLI.textContent += 'Say something :D'
+              createLI.classList.add('text-center', 'm-5')
+              getMessagesUL.appendChild(createLI)
+            }
+          } catch (error) {
+            console.error('error: ', error);
           }
-          getMessagesUL.appendChild(createLI)
-        })
-
-        if (!getMessagesUL.hasChildNodes()) {
-          const createLI = document.createElement('li')
-          createLI.setAttribute('style', 'white-space: pre-line')
-          createLI.textContent = 'No conversation yet \r\n'
-          createLI.textContent += 'Say something :D'
-          createLI.classList.add('text-center', 'm-5')
-          getMessagesUL.appendChild(createLI)
         }
-      } catch (error) {
-        console.error('error: ', error);
-      }
-    }
 
-    if(sessionStorage.selectedUser){
-      setInterval(getMessage, 1500)
-    }
-    window.onload = () => {
-      getUsers()
-    }
+        if (sessionStorage.selectedUser) {
+          setInterval(getMessage, 1500)
+        }
+        window.onload = () => {
+          getUsers()
+        }
 
-    const sendMessageForm = document.querySelector('form')
-    sendMessageForm.addEventListener('submit', async (e) => {
-      try {
-        e.preventDefault()
-        await sendMessages()
-        await getMessage()
-      } catch (error) {
-        console.error(error)
-      }
-    })
-
-    async function sendMessages() {
-      const getInputMessage = document.getElementById('inputMessage')
-      const message = getInputMessage.value
-      getInputMessage.value = ''
-      const receiverId = sessionStorage.selectedUser
-      try {
-        const result = await fetch('/message/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message,
-            receiverId
-          })
+        const sendMessageForm = document.querySelector('form')
+        sendMessageForm.addEventListener('submit', async (e) => {
+          try {
+            e.preventDefault()
+            await sendMessages()
+            await getMessage()
+          } catch (error) {
+            console.error(error)
+          }
         })
-      } catch (error) {
-        console.error('send message: ', error);
-      }
-    }
-  </script>
-</body>
+
+        async function sendMessages() {
+          const getInputMessage = document.getElementById('inputMessage')
+          const message = getInputMessage.value
+          getInputMessage.value = ''
+          const receiverId = sessionStorage.selectedUser
+          try {
+            const result = await fetch('/message/send', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                message,
+                receiverId
+              })
+            })
+          } catch (error) {
+            console.error('send message: ', error);
+          }
+        }
+      </script>
+      <script src="../js/getMsgInterval.js"></script>
+  </body>
